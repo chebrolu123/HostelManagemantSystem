@@ -1,11 +1,12 @@
 ﻿using HostelManagemantSystem.Data;
 using HostelManagemantSystem.DTO;
 using HostelManagemantSystem.HostelServices.IServices;
+using HostelManagemantSystem.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace HostelManagemantSystem.HostelServices.Services
 {
-    public class TenentService 
+    public class TenentService : ITenentService
     {
         public readonly HostelDbContext _hostelDbContext;
         public TenentService(HostelDbContext hostelDbContext)
@@ -15,42 +16,94 @@ namespace HostelManagemantSystem.HostelServices.Services
 
         public async Task<TenentDashboard> GetDashboardAsync(int superAdminId)
         {
-            var hostels = await _hostelDbContext.Hostels
+            // Step 1: Find all hostel IDs managed by this Super Admin.
+            var managedHostelIds = await _hostelDbContext.Hostels
                 .Where(h => h.SuperAdminId == superAdminId)
+                .Select(h => h.Id)
                 .ToListAsync();
 
-            var hostelIds = hostels.Select(h => h.Id).ToList();
-
-            var guestCount = await _hostelDbContext.Guests
-                .Where(g => hostelIds.Contains(g.HostelId) && g.IsActive)
-                .CountAsync();
-
-            var currentMonth = DateTime.Now.Month;
-            var currentYear = DateTime.Now.Year;
-
-            var monthlyRevenue = await (from p in _hostelDbContext.Payments
-                                        join g in _hostelDbContext.Guests on p.GuestId equals g.Id
-                                        where p.ForMonth == currentMonth
-                                           && p.ForYear == currentYear
-                                           && hostelIds.Contains(g.HostelId)
-                                        select p.Amount)
-                                       .SumAsync();
-
-            return new TenentDashboard
+            // If the admin manages no hostels, return an empty dashboard.
+            if (!managedHostelIds.Any())
             {
-                TotalHostels = hostels.Count,
-                TotalGuests = guestCount,
-                MonthlyProfitLoss = monthlyRevenue, 
-                TotalHostels = hostels.Select(h => new HostelOverView
+                return new TenentDashboard(); // Returns a DTO with 0s and empty lists
+            }
+
+            // Step 2: Get the overview details for only those hostels.
+            var hostelOverviews = await _hostelDbContext.Hostels
+                .Where(h => managedHostelIds.Contains(h.Id)) // Filter by the list of IDs
+                .Select(h => new HostelOverView
                 {
+                    HostelId = h.Id,
                     Name = h.Name,
                     Address = h.Address,
                     LicenseExpiryDate = h.LicenseExpiryDate,
                     IsActive = h.IsActive
-                }).ToList()
+                })
+                .ToListAsync();
+
+            // Step 3: Calculate metrics using the list of hostel IDs.
+            int totalHostels = hostelOverviews.Count;
+
+            // Count guests that belong to any of the managed hostels.
+            int totalGuests = await _hostelDbContext.Guests
+                .CountAsync(g => managedHostelIds.Contains(g.HostelId)); // Assumes Guest has HostelId
+
+            DateTime now = DateTime.UtcNow;
+
+            // Sum payments from any of the managed hostels for the current month.
+            decimal monthlyProfitLoss = await _hostelDbContext.Payments
+                .Where(p => managedHostelIds.Contains(p.Id) && // Assumes Payment has HostelId
+                            p.PaymentDate.Month == now.Month &&
+                            p.PaymentDate.Year == now.Year)
+                .SumAsync(p => p.Amount);
+
+            // Step 4: Return the complete DTO.
+            return new TenentDashboard
+            {
+                TotalHostels = totalHostels,
+                TotalGuests = totalGuests,
+                MonthlyProfitLoss = monthlyProfitLoss,
+                Hostels = hostelOverviews 
             };
         }
+        public async Task<Hostels> CreateHostelAsync(CreateHostel create, int SuperAdminId)
+        {
+            var Hostel = new Hostels
+            {
+                Name = create.Name,
+                Address = create.Address,
+                LicenseExpiryDate = DateTime.Parse(create.LicenseExpiryDate), 
+                IsActive = true, 
+                //CreatedAt = DateTime.UtcNow,
+                
+                SuperAdminId = SuperAdminId
+            };
+
+            _hostelDbContext.Hostels.Add(Hostel);
+            await _hostelDbContext.SaveChangesAsync();
+            return Hostel;
+
+        }
+        public async Task<Hostels> UpdateHostelAsync(int Id, UpdateHostel update, int SuperAdminId)
+        {
+            var UpadteHostels = await _hostelDbContext.Hostels
+                .FirstOrDefaultAsync(h => h.Id == Id && h.SuperAdminId == SuperAdminId);
+            if (UpadteHostels == null)
+            {
+                return null;
+            }
+            UpadteHostels.Name = update.Name;
+            UpadteHostels.Address = update.Address;
+            UpadteHostels.LicenseExpiryDate = DateTime.Parse(update.LicenseExpiryDate);
+            UpadteHostels.IsActive = update.IsActive;
+            _hostelDbContext.Hostels.Update(UpadteHostels);
+            await _hostelDbContext.SaveChangesAsync();
+            return UpadteHostels;
+        }
+
+
 
     }
 }
+
 

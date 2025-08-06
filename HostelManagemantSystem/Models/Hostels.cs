@@ -20,7 +20,7 @@ namespace HostelManagemantSystem.Models
         public int SuperAdminId { get; set; }
         public User? User { get; set; }
         [Required]
-        public string? LicenseExpiryDate { get; set; }
+        public DateTime LicenseExpiryDate { get; set; }
         [Required]
         public  bool IsActive { get; set; } = true;
 

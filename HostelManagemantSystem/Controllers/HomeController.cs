@@ -13,6 +13,11 @@ namespace HostelManagemantSystem.Controllers
         { 
             _userServices = userServices;
         }
+        //private readonly IAdminservices _adminServices;
+        //public HomeController(IAdminservices adminServices)
+        //{
+        //    _adminServices = adminServices;
+        //}
         [HttpGet]
         [Route("GetAllUsers")]
         public async Task<IActionResult> GetAllUsers()
