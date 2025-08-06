@@ -42,4 +42,8 @@ namespace HostelManagemantSystem.DTO
         public bool IsActive { get; set; } = true;
 
     }
+    public class StatusUpdate
+    {
+        public bool IsActive { get; set; }
+    }
 }

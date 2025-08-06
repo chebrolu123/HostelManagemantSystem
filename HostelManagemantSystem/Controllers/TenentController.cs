@@ -4,6 +4,8 @@ using HostelManagemantSystem.HostelServices.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
+using System.Data;
 
 namespace HostelManagemantSystem.Controllers
 {
@@ -68,6 +70,21 @@ namespace HostelManagemantSystem.Controllers
 
            
             return NoContent();
+        }
+        [HttpPatch("{id}/status")]
+        public async Task<IActionResult> StatusUpdates(int id, [FromBody] StatusUpdate statusUpdate)
+        {
+            var updatedHostel = await _tenentService.StatusUpadateAsync(id, statusUpdate.IsActive);
+            if (updatedHostel == null)
+            {
+                return NotFound(new { Message = $"Hostel with ID {id} not found." });
+            }
+
+            return Ok(new
+            {
+                Message = $"Hostel has been successfully {(updatedHostel.IsActive ? "activated" : "deactivated")}.",
+                Data = updatedHostel
+            });
         }
 
         

@@ -8,5 +8,6 @@ namespace HostelManagemantSystem.HostelServices.IServices
         Task<TenentDashboard> GetDashboardAsync(int superAdminId);
         Task<Hostels> CreateHostelAsync(CreateHostel create,int SuperAdmin);
         Task<Hostels> UpdateHostelAsync(int Id, UpdateHostel update, int SuperAdminId);
+        Task<Hostels> StatusUpadateAsync(int id, bool IsActive);
     }
 }

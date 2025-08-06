@@ -100,6 +100,17 @@ namespace HostelManagemantSystem.HostelServices.Services
             await _hostelDbContext.SaveChangesAsync();
             return UpadteHostels;
         }
+        public async Task<Hostels> StatusUpadateAsync(int id, bool IsActive)
+        {
+            var status = await _hostelDbContext.Hostels.FindAsync(id);
+            if (status == null)
+            {
+                return null; 
+            }
+            status.IsActive = IsActive;
+             await _hostelDbContext.SaveChangesAsync();
+            return status;
+        }
 
 
 
