@@ -5,10 +5,15 @@ namespace HostelManagemantSystem.HostelServices.IServices
 {
     public interface IAdminservices
     {
-        Task<List<HostelAdmin>> GetAdminsForHostelAsync(int hostelId);
-        Task AddHostelAdminAsync(int hostelId);
-        Task UpdateHostelAdminAsync(int userId);
-        Task ToggleUserStatusAsync(int userId);
+        Task<IEnumerable<HostelDropDown>> GetHostelNamesAsync();
+
+        Task<IEnumerable<HostelAdmin>> GetAdminsByHostelIdAsync(int Id);
+        Task<User?> AddAdminAsync( int HostelId ,AddAdmin addAdmin);
+        Task<User?> UpdateAdminAsync(int UserId, UpadteAdmin updateAdmin);
+       
+       Task<bool> UpdateStautsAsync(int UserId, bool IsActive);
+
+        Task<bool> IsEmailExistsAsync(string email);
 
     }
 }

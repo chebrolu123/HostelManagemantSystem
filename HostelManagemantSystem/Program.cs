@@ -16,6 +16,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IUserServices, UsersService>();
 builder.Services.AddScoped<ITenentService, TenentService>();
+builder.Services.AddScoped<IAdminservices, AdminService>();
 
 builder.Services.AddDbContext<HostelDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));

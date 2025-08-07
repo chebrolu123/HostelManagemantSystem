@@ -24,9 +24,11 @@ namespace HostelManagemantSystem.Models
         [Required]
         public  bool IsActive { get; set; } = true;
 
+        public ICollection<User>? HostelAdmin { get; set; }
         public ICollection<Rooms>? Rooms { get; set; }
         public ICollection<Guests>? Guests { get; set; }
         public ICollection<Employees>? Employees { get; set; }
         public ICollection<Expenditure>? Expenditure { get; set; }
+        
     }
 }

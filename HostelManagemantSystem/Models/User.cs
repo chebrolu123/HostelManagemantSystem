@@ -38,9 +38,15 @@ namespace HostelManagemantSystem.Models
 
         public DateTime CreatedAt { get; set; }
 
+        public int? HostelId { get; set; }
+
+        [ForeignKey("HostelId")]
+        public Hostels? Hostel { get; set; }
+
+
         public ICollection<Hostels>? Hostels { get; set; }
-       public ICollection<Guests>? Guests { get; set; }
+        public ICollection<Guests>? Guests { get; set; }
        public ICollection<EmployeeAttendence>? EmployeeAttendences { get; set; }
-       
+        
     }
 }
