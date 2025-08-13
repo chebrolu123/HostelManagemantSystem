@@ -2,5 +2,10 @@
 {
     public class AdminDasboard
     {
+
+    }
+    public class MothlyExpenditures
+    {
+
     }
 }

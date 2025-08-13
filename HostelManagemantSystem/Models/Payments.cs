@@ -23,6 +23,6 @@ namespace HostelManagemantSystem.Models
         [Required]
         [StringLength(50)]
         public string? PaymentMode { get; set; }
-
+        public bool IsPaid { get; set; } = false;
     }
 }
