@@ -17,9 +17,9 @@ namespace HostelManagemantSystem.Models
         public string? BedNumber { get; set; }
         [Required]
         public decimal CostPerMonth { get; set; }
-
         public ICollection<Guests>? Guests { get; set; }
 
+        public bool IsActive { get; set; } = true;
 
     }
 }

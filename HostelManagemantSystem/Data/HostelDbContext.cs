@@ -107,6 +107,13 @@ namespace HostelManagemantSystem.Data
             modelBuilder.Entity<Hostels>()
                 .Property(x => x.IsActive)
                 .HasDefaultValue(true);
+
+            modelBuilder.Entity<Role>().HasData(
+                    new Role { ID = 1, Name = "SuperAdmin" },
+                    new Role { ID = 2, Name = "HostelAdmin" },
+                    new Role { ID = 3, Name = "Guest" },
+                    new Role { ID = 4, Name = "Employee" }
+            );
         }
     }
 }

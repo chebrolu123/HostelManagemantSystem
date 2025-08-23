@@ -42,11 +42,10 @@ namespace HostelManagemantSystem.Models
 
         [ForeignKey("HostelId")]
         public Hostels? Hostel { get; set; }
-
-
+        public string? Address { get; set; }
         public ICollection<Hostels>? Hostels { get; set; }
         public ICollection<Guests>? Guests { get; set; }
        public ICollection<EmployeeAttendence>? EmployeeAttendences { get; set; }
-        
+       
     }
 }

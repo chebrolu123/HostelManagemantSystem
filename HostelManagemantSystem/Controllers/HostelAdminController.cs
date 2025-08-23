@@ -20,6 +20,7 @@ namespace HostelManagemantSystem.Controllers
             var hostels = await _adminService.GetHostelNamesAsync();
             return Ok(hostels);
         }
+
         [HttpGet("GetAdminsByHostelId/{id}")]
         public async Task<IActionResult> GetAdminsByHostelId(int id)
         {
@@ -30,6 +31,7 @@ namespace HostelManagemantSystem.Controllers
             }
             return Ok(admins);
         }
+
         [HttpPost("AddAdmin/{HostelId}")]
         public async Task<IActionResult> AddAdmin(int HostelId, [FromBody] AddAdmin addAdmin)
         {
@@ -44,6 +46,7 @@ namespace HostelManagemantSystem.Controllers
             }
             return CreatedAtAction(nameof(GetAdminsByHostelId), new { id = HostelId }, newAdmin);
         }
+
         [HttpPut("UpdateAdmin/{userId}")]
         public async Task<IActionResult> UpdateAdmin(int userId, [FromBody] UpadteAdmin updateAdmin)
         {
@@ -58,6 +61,7 @@ namespace HostelManagemantSystem.Controllers
             }
             return Ok(updatedAdmin);
         }
+
         [HttpPut("UpdateStatus/{userId}")]
         public async Task<IActionResult> UpdateStatus(int userId, [FromBody] UpdateStatus updateStatus)
         {

@@ -4,6 +4,7 @@ using HostelManagemantSystem.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HostelManagemantSystem.Migrations
 {
     [DbContext(typeof(HostelDbContext))]
-    partial class HostelDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250822124304_AddGuestRegistrationFields")]
+    partial class AddGuestRegistrationFields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -170,14 +173,8 @@ namespace HostelManagemantSystem.Migrations
                     b.Property<int>("HostelId")
                         .HasColumnType("int");
 
-                    b.Property<string>("IdProof")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
-
-                    b.Property<int>("MothlyRent")
-                        .HasColumnType("int");
 
                     b.Property<DateOnly>("NextPaymentDate")
                         .HasColumnType("date");
@@ -287,28 +284,6 @@ namespace HostelManagemantSystem.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("Roles");
-
-                    b.HasData(
-                        new
-                        {
-                            ID = 1,
-                            Name = "SuperAdmin"
-                        },
-                        new
-                        {
-                            ID = 2,
-                            Name = "HostelAdmin"
-                        },
-                        new
-                        {
-                            ID = 3,
-                            Name = "Guest"
-                        },
-                        new
-                        {
-                            ID = 4,
-                            Name = "Employee"
-                        });
                 });
 
             modelBuilder.Entity("HostelManagemantSystem.Models.Rooms", b =>
@@ -343,9 +318,6 @@ namespace HostelManagemantSystem.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<string>("Address")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()

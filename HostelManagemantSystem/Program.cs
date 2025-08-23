@@ -17,6 +17,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IUserServices, UsersService>();
 builder.Services.AddScoped<ITenentService, TenentService>();
 builder.Services.AddScoped<IAdminservices, AdminService>();
+builder.Services.AddScoped <IAdminDasboardServices, AdminDasboardService>();
+builder.Services.AddScoped<IGuestsServices, GuestsServices>();
 
 builder.Services.AddDbContext<HostelDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));

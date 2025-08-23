@@ -29,6 +29,9 @@ namespace HostelManagemantSystem.Models
         public decimal SecurityDeposit { get; set; }
         [Required]
         public bool IsActive { get; set; } = true;
+        public int MothlyRent { get; set; }
+
+        public string? IdProof { get; set; }
 
         public ICollection<Payments>? Payments { get; set; }
     }

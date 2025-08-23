@@ -13,7 +13,7 @@ namespace HostelManagemantSystem.Migrations
 {
     [DbContext(typeof(HostelDbContext))]
     [Migration("20250801070159_initial")]
-    partial class initial
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
